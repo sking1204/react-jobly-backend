@@ -1,13 +1,42 @@
+//new
 
-
-
-//Another workaround
 "use strict";
 /** Database setup for jobly. */
 const { Client } = require("pg");
 const { getDatabaseUri } = require("./config");
 
-let DB_URI = "postgresql:///react_jobly_solution";
+let db;
+
+if (process.env.NODE_ENV === "production") {
+  db = new Client({
+    // host: "/var/run/postgresql/",
+    // database: getDatabaseUri(),
+    connectionString: getDatabaseUri(),
+    ssl: {
+      rejectUnauthorized: false
+    }
+  });
+} else {
+  db = new Client({
+    // host: "/var/run/postgresql/",
+    // database: getDatabaseUri()
+    connectionString: getDatabaseUri()
+  });
+}
+
+db.connect();
+
+module.exports = db;
+
+
+
+// //Another workaround
+// "use strict";
+// /** Database setup for jobly. */
+// const { Client } = require("pg");
+// const { getDatabaseUri } = require("./config");
+
+// let DB_URI;
 
 // if (process.env.NODE_ENV === "test") {
 //   DB_URI = "postgresql:///react_jobly_solution_test";
@@ -15,13 +44,13 @@ let DB_URI = "postgresql:///react_jobly_solution";
 //   DB_URI = "postgresql:///react_jobly_solution";
 // }
 
-let db = new Client({
-  connectionString: DB_URI
-});
+// let db = new Client({
+//   connectionString: DB_URI
+// });
 
-db.connect();
+// db.connect();
 
-module.exports = db;
+// module.exports = db;
 
 
 
